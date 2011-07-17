@@ -1,0 +1,75 @@
+/* main dialog style */
+.pe2-header {
+	padding: 6px;
+	background:#eaf2fa;
+	position:fixed;
+	width:640px;
+	top:0;
+	left:0;
+}
+
+#pe2-options {
+	padding:38px 6px;
+	width:652px;
+	background:white;
+}
+
+#pe2-message1,#pe2-message2,#pe2-message3 {
+	padding:4px 10px;
+}
+
+#pe2-main {
+	padding:38px 0 0;
+	width:652px;
+	background:white;
+}
+
+
+#pe2-main table {
+	border:0;
+	margin:2px 6px;
+	text-align:center;
+}
+#pe2-main td {
+	vertical-align:top;
+	cursor:pointer;
+	border: 1px solid white;
+}
+#pe2-main table a {
+	text-decoration:none;
+}
+#pe2-main td:hover {
+	background:#f1f1f1;
+}
+
+#pe2-main td.selected {
+	background:#eee;
+	border: 1px solid #d54e21;
+}
+
+#pe2-main a img,#pe2-main a span {
+	padding:5px;
+	display:block;
+	text-align:center;
+	width:144px;
+	font-size:10px;
+	line-height:10px;
+}
+
+#pe2-main div.numbers {
+	position:absolute;
+	top:1; left:1;
+	width: 144px;
+	height: 144px;
+	z-index:100;
+	opacity:0.5;
+	font-size:30px;
+	color:black;	
+	text-shadow: white -1px 0, white 1px 0, white 0 -1px, white 0 1px;
+	text-align:right;
+	padding:10px 0;	
+}
+
+.pe2-space {
+	margin-left:10px;
+}

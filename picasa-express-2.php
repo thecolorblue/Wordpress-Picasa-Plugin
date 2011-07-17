@@ -233,7 +233,7 @@ if (!class_exists("PicasaExpressX2")) {
 			$media_picasa_title = __("Add Picasa image or gallery", 'pe2');
 			$put_id = ($id)?"id=\"$id\"":'';
 
-			echo "<a href=\"$media_picasa_iframe_src\" $put_id class=\"thickbox\" title=\"$media_picasa_title\"><img src=\"$plugin_URL/icon_picasa$icon.gif\" alt=\"$media_picasa_title\" /></a>";
+			echo "<a href=\"$media_picasa_iframe_src\" $put_id class=\"thickbox\" title=\"$media_picasa_title\"><img src=\"$plugin_URL/icon_picasa1.gif\" alt=\"$media_picasa_title\" /></a>";
 
 		}
 
@@ -323,9 +323,9 @@ if (!class_exists("PicasaExpressX2")) {
 		function add_style() {
 			global $is_IE;
 			wp_enqueue_style('media');
-			wp_enqueue_style('pe2-style', $this->plugin_URL.'/picasa-express-2.css',array(),PE2_VERSION,'all');
+			wp_enqueue_style('pe2-style', $this->plugin_URL.'/picasa.css',array(),PE2_VERSION,'all');
 			if ($is_IE)
-				wp_enqueue_style('pe2-style-ie', $this->plugin_URL.'/picasa-express-2-IE.css',array(),PE2_VERSION,'all');
+				wp_enqueue_style('pe2-style-ie', $this->plugin_URL.'/picasa-IE.css',array(),PE2_VERSION,'all');
 		}
 
 		/**
@@ -970,7 +970,7 @@ if (!class_exists("PicasaExpressX2")) {
 
 				<?php
 					if ($message) {
-						echo '<div id="picasa-express-x2-message" class="updated"><p><strong>'.$message.'</strong></p></div>';
+						echo '<div id="picasa-message" class="updated"><p><strong>'.$message.'</strong></p></div>';
 					}
 				?>
 
@@ -1031,7 +1031,7 @@ if (!class_exists("PicasaExpressX2")) {
 		 */
 		function add_settings_link($links) {
 			if (!current_user_can('manage_options')) return $links;
-			$settings_link = '<a href="options-general.php?page=picasa-express-2">'.__('Settings', 'pe2').'</a>';
+			$settings_link = '<a href="options-general.php?page=picasa">'.__('Settings', 'pe2').'</a>';
 			array_unshift( $links, $settings_link );
 			return $links;
 		}
@@ -1043,9 +1043,9 @@ if (!class_exists("PicasaExpressX2")) {
 		 */
 		function add_settings_page() {
 			if (!current_user_can('manage_options')) return;
-			add_options_page(__('Picasa Express x2', 'pe2'), __('Picasa Express x2', 'pe2'), 'manage_options', 'picasa-express-2', array(&$this, 'settings_form'));
+			add_options_page(__('Picasa Settings', 'pe2'), __('Picasa Settings', 'pe2'), 'manage_options', 'picasa-settings', array(&$this, 'settings_form'));
 			add_action('admin_init', array(&$this, 'settings_reg'));
-			add_action('admin_print_styles-settings_page_picasa-express-2', array(&$this, 'settings_style'));
+			add_action('admin_print_styles-settings_page_picasa', array(&$this, 'settings_style'));
 		}
 
 		/**
@@ -1055,7 +1055,7 @@ if (!class_exists("PicasaExpressX2")) {
 		function settings_reg() {
 			foreach ($this->options as $key => $option) {
 				if ($key != 'pe2_token') // skip token in non secure requests
-					register_setting( 'picasa-express-2', $key );
+					register_setting( 'picasa', $key );
 			}
 		}
 
@@ -1086,7 +1086,7 @@ STYLE;
 		 * Add help to the top of the setting page
 		 */
 		function contextual_help($help, $screen) {
-			if ( 'settings_page_picasa-express-2' == $screen ) {
+			if ( 'settings_page_picasa' == $screen ) {
 				$homepage = __('Plugin homepage','pe2');
 				$messages = array(
 					__('To receive access for private album press link under username. You will be redirected to Google for grant access. If you press "Grant access" button you will be returned to settings page, but access will be granted.','pe2'),
@@ -1098,9 +1098,6 @@ STYLE;
 				$help .= <<<HELP_TEXT
 				<h5>Small help</h5>
 				$message
-				<div class="metabox-prefs">
-					<a href="http://wott.info/picasa-express">$homepage</a>
-				</div>
 HELP_TEXT;
 			}
 			return $help;
@@ -1162,16 +1159,16 @@ HELP_TEXT;
 
 			<div class="wrap">
 			<div id="icon-options-general" class="icon32"><br /></div>
-			<h2><?php _e('Picasa Express x2 settings', 'pe2')?></h2>
+			<h2><?php _e('Picasa Settings', 'pe2')?></h2>
 
 			<?php
 				if (isset($message) && $message) {
-					echo '<div id="picasa-express-x2-message" class="updated"><p><strong>'.$message.'</strong></p></div>';
+					echo '<div id="picasa-message" class="updated"><p><strong>'.$message.'</strong></p></div>';
 				}
 			?>
 
 			<form method="post" action="options.php">
-    			<?php settings_fields( 'picasa-express-2' ); ?>
+    			<?php settings_fields( 'picasa' ); ?>
 
 				<input type="hidden" name="pe2_configured" value="1" />
 
@@ -1239,7 +1236,7 @@ HELP_TEXT;
 					$this->make_settings_row(
 						__('Picasa user name for site', 'pe2'),
 						'<input type="text" class="regular-text" name="pe2_user_name" value="'.esc_attr($user).'" />'.$result.
-						((!$this->options['pe2_token'])?'<br /><a href="https://www.google.com/accounts/AuthSubRequest?next='.urlencode(WP_PLUGIN_URL.'/'.plugin_basename(__FILE__).'?authorize').'&scope=http%3A%2F%2Fpicasaweb.google.com%2Fdata%2F&session=1&secure=0">'.__('Requesting access to private albums', 'pe2').'</a>':'<br/><a href="?page=picasa-express-2&revoke">'.__('Revoke access to private albums', 'pe2').'</a>'),
+						((!$this->options['pe2_token'])?'<br /><a href="https://www.google.com/accounts/AuthSubRequest?next='.urlencode(WP_PLUGIN_URL.'/'.plugin_basename(__FILE__).'?authorize').'&scope=http%3A%2F%2Fpicasaweb.google.com%2Fdata%2F&session=1&secure=0">'.__('Requesting access to private albums', 'pe2').'</a>':'<br/><a href="?page=picasa&revoke">'.__('Revoke access to private albums', 'pe2').'</a>'),
 						(($this->options['pe2_token'])?__('You receive the access to private albums.', 'pe2'):__('By this link you will be redirected to the Google authorization page. Please, use same name as above to login before accept.', 'pe2')),
 						'class="picasa-site-user" style="display:'.(('blog'==$this->options['pe2_level'])?'table-row':'none').'"'
 					);
@@ -1527,7 +1524,7 @@ HELP_TEXT;
 if (isset($_GET['authorize'])&&!defined('ABSPATH')) {
 
 	if (!isset($_GET['token'])||!$_GET['token']||strlen($_GET['token'])>256) {
-		header('Location: '.preg_replace('/wp-content.*/','',$_SERVER["REQUEST_URI"]).'wp-admin/options-general.php?page=picasa-express-2');
+		header('Location: '.preg_replace('/wp-content.*/','',$_SERVER["REQUEST_URI"]).'wp-admin/options-general.php?page=picasa');
 		die();
 	}
 
@@ -1577,7 +1574,7 @@ if (isset($_GET['authorize'])&&!defined('ABSPATH')) {
 	if (isset($user_id))
 		header('Location: '.preg_replace('/wp-content.*/','',$_SERVER["REQUEST_URI"]).'wp-admin/profile.php?message='.rawurlencode($message));
 	else
-		header('Location: '.preg_replace('/wp-content.*/','',$_SERVER["REQUEST_URI"]).'wp-admin/options-general.php?page=picasa-express-2&message='.rawurlencode($message));
+		header('Location: '.preg_replace('/wp-content.*/','',$_SERVER["REQUEST_URI"]).'wp-admin/options-general.php?page=picasa&message='.rawurlencode($message));
 	die();
 
 } else {
